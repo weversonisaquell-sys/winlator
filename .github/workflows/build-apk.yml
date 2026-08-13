@@ -25,25 +25,22 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Dar permissão ao gradlew
+        working-directory: app
         run: chmod +x ./gradlew
 
       - name: Compilar APK (release não assinado)
+        working-directory: app
         run: ./gradlew assembleRelease --stacktrace
 
       - name: Compilar APK (debug, backup caso release falhe)
         if: failure()
+        working-directory: app
         run: ./gradlew assembleDebug --stacktrace
-
-      - name: Encontrar APKs gerados
-        id: find
-        run: |
-          find . -name "*.apk" -path "*/outputs/*" > apks.txt
-          cat apks.txt
 
       - name: Publicar APK como artifact
         uses: actions/upload-artifact@v4
         with:
           name: xodos-winlator-apk
           path: |
-            **/outputs/**/*.apk
+            app/**/outputs/**/*.apk
           if-no-files-found: warn
