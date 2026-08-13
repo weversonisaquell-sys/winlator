@@ -15,6 +15,13 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Forçar app para a versão mais recente
+        run: |
+          cd app
+          git fetch origin main
+          git checkout origin/main
+          cd ..
+
       - name: Configurar JDK 17
         uses: actions/setup-java@v4
         with:
